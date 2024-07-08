@@ -48,6 +48,10 @@ class Simulation:
         for particle in Constants.PARTICLES:
             Constants.QUADTREE.insert(particle)
         
+        # Start velocity updating thread
+        velThread = threading.Thread(target=Particle.updateVelocities)
+        velThread.start()
+        
         while running:
             start_time = time.time() # For framerate calculation
             for event in pygame.event.get():
@@ -63,7 +67,7 @@ class Simulation:
             # Constants.QUADTREE.clear()
 
             # Particle.batchCalcDest(Constants.PARTICLES)
-            Constants.PARTICLE_NEIGHBORS = Particle.batchQuery()
+            # Constants.PARTICLE_NEIGHBORS = Particle.batchQuery()
             
             for particle in Constants.PARTICLES:
                 particle.update()
@@ -93,6 +97,8 @@ class Simulation:
             
         self.performanceMonitor.stop()
         self.performanceMonitor.join()
+        
+        velThread.join()
         pygame.quit()
         sys.exit()
         

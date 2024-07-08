@@ -9,7 +9,7 @@ import pstats
 def runSimulation():
     simulation = Simulation.get_instance()
     
-    for _ in range(100):
+    for _ in range(2):
         particle = Particle(random.uniform(0.0, Constants.SCREEN_WIDTH), random.uniform(0.0, Constants.SCREEN_HEIGHT))
         Constants.PARTICLES.add(particle)
 

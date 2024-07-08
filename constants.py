@@ -1,6 +1,7 @@
 from enum import Enum
 import pygame
-import collections
+import time
+from collections import defaultdict
 
 class Constants:
     DEVELOPER = True
@@ -22,6 +23,13 @@ class Constants:
     
     PARTICLES = set({})
     PARTICLE_NEIGHBORS = None
+    
+    
+    # Setup double buffering
+    PARTICLE_NEIGHBOR_VEL_BUFFERS = [defaultdict(list), defaultdict(list)]
+    ACTIVE_BUFFER_INDEX = 0
+    LAST_UPDATE_TIME = time.time()
+    
     
     
     # @staticmethod
