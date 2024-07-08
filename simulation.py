@@ -32,6 +32,9 @@ class Simulation:
 
             self.performanceMonitor = PerformanceMonitor(Constants.MONITOR_INTERVAL) # Interval in seconds
             self.performanceMonitor.start()
+
+            # Event to handle killing thread on program end
+            self.velThreadStopEvent = threading.Event()
                 
     @staticmethod
     def get_instance():
@@ -49,7 +52,7 @@ class Simulation:
             Constants.QUADTREE.insert(particle)
         
         # Start velocity updating thread
-        velThread = threading.Thread(target=Particle.updateVelocities)
+        velThread = threading.Thread(target=Particle.updateVelocities, args=(self.velThreadStopEvent,))
         velThread.start()
         
         while running:
@@ -97,6 +100,9 @@ class Simulation:
             
         self.performanceMonitor.stop()
         self.performanceMonitor.join()
+
+        # Signal to stop the while loop
+        self.velThreadStopEvent.set()
         
         velThread.join()
         pygame.quit()
