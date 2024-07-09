@@ -23,6 +23,8 @@ class Constants:
     
     PARTICLES = set({})
     PARTICLE_NEIGHBORS = None
+    PARTICLE_ATTRACTION_ALPHA = 10
+    PARTICLE_ATTRACTION_BETA = 0.2
     
     
     # Setup double buffering

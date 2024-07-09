@@ -14,7 +14,7 @@ import time
 
 class Particle():
     __particleAttractions = None
-    MAX_INFLUENCE_DIST = 100
+    MAX_INFLUENCE_DIST = 130
     MAX_INFLUENCE_DIST_x2 = MAX_INFLUENCE_DIST * 2
     MAX_INFLUENCE_DIST_SQUARED = MAX_INFLUENCE_DIST ** 2
     MIN_INFLUENCE_DIST = 5
@@ -45,7 +45,7 @@ class Particle():
                 Particle.__particleAttractions[p.name] = [0] * len(Particle.particleTypes)
             
             typesList = list(Particle.particleTypes)
-            attractionMultiplier = 0.6
+            attractionMultiplier = 0.005
             for i, p in enumerate(typesList):
                 for j in range (i, len(Particle.particleTypes)):
                     if i == j:
@@ -77,9 +77,7 @@ class Particle():
                 
                 neighborPositions = np.array([n.pos for n in neighbors if n != p])
                 
-                if len(neighborPositions) > 0: 
-                    # neighborPositions = np.array([n.pos for n in neighbors if n != p])
-                    # deltas = [np.subtract(p.pos, pos) for pos in neighborPositions]
+                if len(neighborPositions) > 0:
                     deltas = neighborPositions - p.pos  # Vectorized subtraction
                     distances = np.linalg.norm(deltas, axis=1)
                     directions = deltas / distances[:, np.newaxis] # Normalize
@@ -93,7 +91,18 @@ class Particle():
                     neighborInfluenceIndexes = [Particle.particleTypeByEnum(n.particleType) for n in neighbors if n != p]
                     influences = np.array([Particle.getParticleAttractions()[p.particleType.name][index] for index in neighborInfluenceIndexes])
                     
-                    forces = influences * np.exp(-distances / Particle.MAX_INFLUENCE_DIST)
+                    # forces = influences * np.exp(-distances / Particle.MAX_INFLUENCE_DIST)
+                    
+                    forces = np.zeros_like(distances)
+                    
+                    
+                    # Split close particles into another object for a separate force function
+                    closeDistances = distances < Particle.MIN_INFLUENCE_DIST
+                    farDistances = ~closeDistances
+                    
+                    forces[closeDistances] = ((distances[closeDistances]) / Constants.PARTICLE_ATTRACTION_ALPHA) - 1
+                    forces[farDistances] = Particle.MAX_INFLUENCE_DIST * influences[farDistances] * (1 - ((abs(2*(distances[farDistances] / Particle.MAX_INFLUENCE_DIST) - 1 - Constants.PARTICLE_ATTRACTION_BETA))/(1-Constants.PARTICLE_ATTRACTION_BETA)))
+                    
                     forces = forces[:, np.newaxis]  # Reshape for broadcasting
                     
                     
@@ -117,7 +126,7 @@ class Particle():
     def update(self):
         self.calcVelocity()
         self.checkBoundaries()
-        self.speedLimit()
+        # self.speedLimit()
         self.move()
         self.draw()
         # Constants.QUADTREE.update(self)
@@ -126,6 +135,7 @@ class Particle():
     def checkBoundaries(self):
         if len(self.vel) == 0:
             return
+        
         if self.pos[0] < 0:
             self.vel[0] = 0.05
         elif self.pos[0] > Constants.SCREEN_WIDTH:
@@ -139,6 +149,7 @@ class Particle():
     def speedLimit(self):
         if len(self.vel) == 0:
             return
+        
         if self.vel[0] > Particle.SPEED_LIMIT:
             self.vel[0] = Particle.SPEED_LIMIT
         elif self.vel[0] < Particle.SPEED_LIMIT * -1:
@@ -192,10 +203,10 @@ class Particle():
 
 
     def move(self):
+        # If velocity hasn't been updated since program start, stay still
         if len(self.vel) == 0:
-            # print("innn")
             return
-        self.pos = self.pos + self.vel
+        self.pos += self.vel
 
 
 
