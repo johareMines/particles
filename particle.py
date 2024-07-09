@@ -87,10 +87,11 @@ class Particle():
                     # print("dist: {}".format(distances))
                     # print("direct: {}".format(directions))
                     
-                    # Ensure influences and forces calculation also uses NumPy operations
+                    # NumPy operations
                     neighborInfluenceIndexes = [Particle.particleTypeByEnum(n.particleType) for n in neighbors if n != p]
                     influences = np.array([Particle.getParticleAttractions()[p.particleType.name][index] for index in neighborInfluenceIndexes])
                     
+                    # # Old (bad) physics calculation
                     # forces = influences * np.exp(-distances / Particle.MAX_INFLUENCE_DIST)
                     
                     forces = np.zeros_like(distances)
@@ -119,6 +120,7 @@ class Particle():
             # print("vels updated in {}".format(time.time() - Constants.LAST_UPDATE_TIME))
             Constants.LAST_UPDATE_TIME = time.time()
             
+            # TODO: find better way to regulate how much this is called other than sleep
             time.sleep(0.01)
                     
                 

@@ -93,7 +93,7 @@ class Quadtree:
     def update(self, particle):
         # Check if the particle is still within the same quadtree
         if self.bounds.collidepoint(particle.pos[0], particle.pos[1]):
-            return  # No need to update if the particle is still within the same quadtree
+            return
 
         # Remove the particle from this quadtree if it exists
         if particle in self.particles:

@@ -67,8 +67,6 @@ class Simulation:
             
             Constants.SCREEN.fill((0, 0, 0))  # Clear the screen
             
-            # # Clear quadtree (more efficient than making a new one)
-            # Constants.QUADTREE.clear()
 
             # Particle.batchCalcDest(Constants.PARTICLES)
             # Constants.PARTICLE_NEIGHBORS = Particle.batchQuery()

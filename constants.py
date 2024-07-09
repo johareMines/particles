@@ -34,24 +34,7 @@ class Constants:
     BUFFER_UPDATE_COUNT = 0
     
     
-    
-    # @staticmethod
-    # def batchQuery(particles, maxInfluenceDist):
-    #     queryRanges = []
-    #     results = {}
-        
-    #     for p in particles:
-    #         rangeQuery = pygame.Rect(p.x - maxInfluenceDist, p.y - maxInfluenceDist, maxInfluenceDist * 2, maxInfluenceDist * 2)
-    #         queryRanges.append((p, rangeQuery))
-    #         results[p] = []
-        
-    #     for p, rangeQuery in queryRanges:
-    #         found = Constants.QUADTREE.query(rangeQuery, [])
-    #         results[p] = found
-        
-    #     return results
-    
-    SUPERCELL_SIZE = 80
+    # SUPERCELL_SIZE = 80
     
     class displays(Enum):
         MAIN = 0
@@ -74,3 +57,18 @@ class Constants:
         return outputMin + ((input - inputMin) / (inputMax - inputMin)) * (outputMax - outputMin)
     
     
+# @staticmethod
+    # def batchQuery(particles, maxInfluenceDist):
+    #     queryRanges = []
+    #     results = {}
+        
+    #     for p in particles:
+    #         rangeQuery = pygame.Rect(p.x - maxInfluenceDist, p.y - maxInfluenceDist, maxInfluenceDist * 2, maxInfluenceDist * 2)
+    #         queryRanges.append((p, rangeQuery))
+    #         results[p] = []
+        
+    #     for p, rangeQuery in queryRanges:
+    #         found = Constants.QUADTREE.query(rangeQuery, [])
+    #         results[p] = found
+        
+    #     return results
