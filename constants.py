@@ -29,6 +29,7 @@ class Constants:
     PARTICLE_NEIGHBOR_VEL_BUFFERS = [defaultdict(list), defaultdict(list)]
     ACTIVE_BUFFER_INDEX = 0
     LAST_UPDATE_TIME = time.time()
+    BUFFER_UPDATE_COUNT = 0
     
     
     

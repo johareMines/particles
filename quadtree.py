@@ -35,6 +35,11 @@ class Quadtree:
             if self.nw.insert(particle) or self.ne.insert(particle) or self.sw.insert(particle) or self.se.insert(particle):
                 return True
 
+    def batchInsert(self, particles):
+        for particle in particles:
+            self.insert(particle)
+            
+            
     def clear(self):
         self.particles = []
         self.divided = False
@@ -56,17 +61,32 @@ class Quadtree:
 
         return found
     
+    # def update(self, particle):
+    #     # Remove the particle from this quadtree if it exists
+    #     if particle in self.particles:
+    #         self.particles.remove(particle)
+
+    #     # Reinsert the particle in the correct quadtree
+    #     if not self.insert(particle):
+    #         if self.divided:
+    #             if self.nw.insert(particle) or self.ne.insert(particle) or self.sw.insert(particle) or self.se.insert(particle):
+    #                 return
+    #         else:
+    #             self.insert(particle)
+    
     def update(self, particle):
+        # Check if the particle is still within the same quadtree
+        if self.bounds.collidepoint(particle.pos[0], particle.pos[1]):
+            return  # No need to update if the particle is still within the same quadtree
+
         # Remove the particle from this quadtree if it exists
         if particle in self.particles:
             self.particles.remove(particle)
 
         # Reinsert the particle in the correct quadtree
-        if not self.insert(particle):
-            if self.divided:
-                if self.nw.insert(particle) or self.ne.insert(particle) or self.sw.insert(particle) or self.se.insert(particle):
-                    return
-            else:
-                self.insert(particle)
-    
-    
+        self.insert(particle)
+
+    def batchUpdate(self, particles):
+        # Clear the quadtree before re-inserting particles
+        self.clear()
+        self.batchInsert(particles)

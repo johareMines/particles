@@ -48,8 +48,9 @@ class Simulation:
         
         Constants.QUADTREE = Quadtree(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT)
         # Insert particles into the quadtree
-        for particle in Constants.PARTICLES:
-            Constants.QUADTREE.insert(particle)
+        # for particle in Constants.PARTICLES:
+        #     Constants.QUADTREE.insert(particle)
+        Constants.QUADTREE.batchInsert(Constants.PARTICLES)
         
         # Start velocity updating thread
         velThread = threading.Thread(target=Particle.updateVelocities, args=(self.velThreadStopEvent,))
@@ -78,9 +79,9 @@ class Simulation:
             # with ThreadPoolExecutor() as executor:
             #     executor.map(lambda particle: particle.update(), Constants.PARTICLES)
             
-            for particle in Constants.PARTICLES:
-                Constants.QUADTREE.update(particle)
-            
+            # for particle in Constants.PARTICLES:
+            #     Constants.QUADTREE.update(particle)
+            Constants.QUADTREE.batchUpdate(Constants.PARTICLES)
                 
             # Draw circle at mouse position
             # self.drawMouseCircle()
